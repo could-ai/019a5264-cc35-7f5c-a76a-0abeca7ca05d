@@ -1,109 +1,102 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import "package:flutter/material.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart";
 
-// main() फंक्शन ॲप सुरू करते.
+// तुमच्या डिझाइनसाठी निवडलेले रंग
+const Color deepMatteBlack = Color(0xFF121212);
+const Color offWhite = Color(0xFFF5F5DC);
+const Color subtleSalmonPink = Color(0xFFFA8072);
+
 void main() {
-  runApp(const PortfolioApp());
+  runApp(const DigitalLibraryApp());
 }
 
-// Artwork मॉडेल क्लास, प्रत्येक कलाकृतीची माहिती जसे की शीर्षक, इमेज URL आणि टॅग्स संग्रहित करतो.
-class Artwork {
-  final String title;
-  final String imageUrl;
-  final List<String> tags;
-
-  const Artwork({
-    required this.title,
-    required this.imageUrl,
-    required this.tags,
-  });
-}
-
-// तुमच्या पोर्टफोलिओसाठी नमुना डेटा. 
-// येथे तुमच्या कलाकृतींची माहिती जोडली जाईल.
-final List<Artwork> artworks = [
-  const Artwork(title: " शांतता", imageUrl: "https://picsum.photos/seed/picsum1/400/600", tags: ["abstact", "zen"]),
-  const Artwork(title: "अस्तित्व", imageUrl: "https://picsum.photos/seed/picsum2/400/500", tags: ["dark", "minimal"]),
-  const Artwork(title: "स्वप्न", imageUrl: "https://picsum.photos/seed/picsum3/400/700", tags: ["vintage", "art"]),
-  const Artwork(title: "प्रतिबिंब", imageUrl: "https://picsum.photos/seed/picsum4/400/550", tags: ["reflection", "water"]),
-  const Artwork(title: "पहाट", imageUrl: "https://picsum.photos/seed/picsum5/400/650", tags: ["nature", "dawn"]),
-  const Artwork(title: "अथांग", imageUrl: "https://picsum.photos/seed/picsum6/400/450", tags: ["ocean", "vast"]),
-  const Artwork(title: "स्मृती", imageUrl: "https://picsum.photos/seed/picsum7/400/750", tags: ["memory", "sepia"]),
-  const Artwork(title: "एकटेपणा", imageUrl: "https://picsum.photos/seed/picsum8/400/600", tags: ["solitude", "academia"]),
-];
-
-// हे ॲपचे मुख्य Widget आहे, जे MaterialApp ला कॉन्फिगर करते.
-class PortfolioApp extends StatelessWidget {
-  const PortfolioApp({super.key});
+// ॲपचे मुख्य Widget, जिथे थीम आणि इतर मुलभूत गोष्टी सेट केल्या आहेत.
+class DigitalLibraryApp extends StatelessWidget {
+  const DigitalLibraryApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // तुमच्या मागणीनुसार 'जापनीज झेन गार्डन्स' आणि 'डार्क ॲकेडेमिया' थीम तयार केली आहे.
-    final theme = ThemeData(
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: const Color(0xFF121212), // डीप मॅट-ब्लॅक बॅकग्राउंड
-      cardColor: const Color(0xFF1E1E1E),
+    return MaterialApp(
+      title: "डिजिटल लायब्ररी",
+      debugShowCheckedModeBanner: false,
+      theme: _buildZenTheme(),
+      home: const ArtworkGallery(),
+    );
+  }
+
+  // 'जापनीज झेन' आणि 'डार्क ॲकेडेमिया' यावर आधारित कस्टम थीम.
+  ThemeData _buildZenTheme() {
+    return ThemeData(
+      scaffoldBackgroundColor: deepMatteBlack,
       colorScheme: const ColorScheme.dark(
-        primary: Color(0xFFF5F5DC), // ऑफ-व्हाईट टेक्स्ट
-        secondary: Color(0xFFE9967A), // सूक्ष्म सॅल्मन-पिंक
-        surface: Color(0xFF1E1E1E),
+        primary: subtleSalmonPink,
+        secondary: subtleSalmonPink,
+        background: deepMatteBlack,
+        surface: deepMatteBlack,
+        onPrimary: offWhite,
+        onSecondary: offWhite,
+        onBackground: offWhite,
+        onSurface: offWhite,
       ),
-      textTheme: GoogleFonts.latoTextTheme(
-        ThemeData.dark().textTheme,
-      ).copyWith(
-        // शीर्षकांसाठी 'Lora' (सेरिफ) फॉन्ट
-        displayLarge: GoogleFonts.lora(fontWeight: FontWeight.bold, color: const Color(0xFFF5F5DC)),
-        displayMedium: GoogleFonts.lora(fontWeight: FontWeight.bold, color: const Color(0xFFF5F5DC)),
-        displaySmall: GoogleFonts.lora(fontWeight: FontWeight.bold, color: const Color(0xFFF5F5DC)),
-        headlineMedium: GoogleFonts.lora(fontWeight: FontWeight.bold, color: const Color(0xFFF5F5DC)),
-        // मुख्य मजकूरासाठी 'Lato' (सॅन्स-सेरिफ) फॉन्ट
-        bodyLarge: GoogleFonts.lato(color: const Color(0xFFF5F5DC).withOpacity(0.87)),
-        bodyMedium: GoogleFonts.lato(color: const Color(0xFFF5F5DC).withOpacity(0.87)),
+      textTheme: TextTheme(
+        // शीर्षकांसाठी (Headers) 'Lora' हा सेरिफ फॉन्ट
+        displayLarge: GoogleFonts.lora(
+            fontSize: 48, fontWeight: FontWeight.bold, color: offWhite),
+        headlineMedium: GoogleFonts.lora(
+            fontSize: 24, fontWeight: FontWeight.w700, color: offWhite),
+        // मुख्य मजकूरासाठी (Body Text) 'Lato' हा सॅन्स-सेरिफ फॉन्ट
+        bodyMedium: GoogleFonts.lato(
+            fontSize: 14, fontWeight: FontWeight.normal, color: offWhite),
+        labelSmall: GoogleFonts.lato(
+            fontSize: 12, fontWeight: FontWeight.bold, color: deepMatteBlack),
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: const Color(0xFF121212),
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        centerTitle: true,
         titleTextStyle: GoogleFonts.lora(
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
-          color: const Color(0xFFF5F5DC),
-        ),
+            fontSize: 22, fontWeight: FontWeight.bold, color: offWhite),
       ),
-    );
-
-    return MaterialApp(
-      title: 'डिजिटल लायब्ररी',
-      debugShowCheckedModeBanner: false,
-      theme: theme,
-      home: const PortfolioHomePage(),
     );
   }
 }
 
-// हे होम पेज आहे, जेथे तुमच्या सर्व कलाकृती 'पिनटरेस्ट-स्टाईल' ग्रिडमध्ये दिसतील.
-class PortfolioHomePage extends StatelessWidget {
-  const PortfolioHomePage({super.key});
+// कलाकृती गॅलरीचे मुख्य पान.
+class ArtworkGallery extends StatelessWidget {
+  const ArtworkGallery({super.key});
+
+  // सध्या नमुना डेटा वापरला आहे. तुम्ही तुमच्या कलाकृती इथे टाकू शकता.
+  static final List<Map<String, String>> _artworks = [
+    {"image": "https://picsum.photos/seed/picsum1/400/600", "title": "अमूर्त विचार"},
+    {"image": "https://picsum.photos/seed/picsum2/400/400", "title": "शहरी स्वप्न"},
+    {"image": "https://picsum.photos/seed/picsum3/400/700", "title": "निसर्गाचे संगीत"},
+    {"image": "https://picsum.photos/seed/picsum4/400/500", "title": "रंगांची उधळण"},
+    {"image": "https://picsum.photos/seed/picsum5/400/800", "title": "शांत समुद्र"},
+    {"image": "https://picsum.photos/seed/picsum6/400/600", "title": "डिजिटल कॅनव्हास"},
+    {"image": "https://picsum.photos/seed/picsum7/400/550", "title": "आठवणीतील क्षण"},
+    {"image": "https://picsum.photos/seed/picsum8/400/450", "title": "भविष्याचा वेध"},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('कलाकृती'),
-        centerTitle: true,
+        title: const Text("कला दालन"),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        // 'पिनटरेस्ट-स्टाईल' लेआउटसाठी StaggeredGridView वापरले आहे.
-        child: MasonryGridView.builder(
-          itemCount: artworks.length,
-          gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 8,
+        padding: const EdgeInsets.all(16.0),
+        // 'पिनटरेस्ट-स्टाईल' लेआउटसाठी Staggered Grid View चा वापर.
+        child: MasonryGridView.count(
+          crossAxisCount: 3, // ग्रिडमधील कॉलम्सची संख्या
+          mainAxisSpacing: 16, // उभ्या घटकांमधील अंतर
+          crossAxisSpacing: 16, // आडव्या घटकांमधील अंतर
+          itemCount: _artworks.length,
           itemBuilder: (context, index) {
-            return ArtworkCard(artwork: artworks[index]);
+            return ArtworkCard(
+              imageUrl: _artworks[index]["image"]!,
+              title: _artworks[index]["title"]!,
+            );
           },
         ),
       ),
@@ -111,11 +104,16 @@ class PortfolioHomePage extends StatelessWidget {
   }
 }
 
-// प्रत्येक कलाकृतीसाठी एक स्वतंत्र कार्ड Widget.
+// प्रत्येक कलाकृती दर्शवणारे एक कार्ड.
 class ArtworkCard extends StatefulWidget {
-  final Artwork artwork;
+  final String imageUrl;
+  final String title;
 
-  const ArtworkCard({super.key, required this.artwork});
+  const ArtworkCard({
+    super.key,
+    required this.imageUrl,
+    required this.title,
+  });
 
   @override
   State<ArtworkCard> createState() => _ArtworkCardState();
@@ -126,76 +124,47 @@ class _ArtworkCardState extends State<ArtworkCard> {
 
   @override
   Widget build(BuildContext context) {
+    // माउस ओव्हर इफेक्टसाठी MouseRegion चा वापर.
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      child: Card(
-        elevation: 0,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          // होव्हर केल्यावर सॅल्मन-पिंक बॉर्डर दिसेल.
-          side: BorderSide(
-            color: _isHovered ? Theme.of(context).colorScheme.secondary : Colors.transparent,
-            width: 2,
-          ),
-        ),
+      cursor: SystemMouseCursors.click,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.0),
         child: Stack(
+          alignment: Alignment.bottomCenter,
           children: [
             // कलाकृतीची इमेज
             Image.network(
-              widget.artwork.imageUrl,
+              widget.imageUrl,
               fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                        : null,
-                    strokeWidth: 2,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                );
-              },
             ),
-            // इमेजवर ग्रेडियंट ओव्हरले, ज्यामुळे मजकूर स्पष्ट दिसेल.
-            Positioned.fill(
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 200),
-                opacity: _isHovered ? 1.0 : 0.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.8),
-                      ],
-                    ),
-                  ),
+            // होव्हर केल्यावर दिसणारा सूक्ष्म इफेक्ट
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12.0),
+                border: Border.all(
+                  color: _isHovered ? subtleSalmonPink : Colors.transparent,
+                  width: 3,
                 ),
               ),
             ),
-            // कलाकृतीचे शीर्षक
-            Positioned(
-              bottom: 10,
-              left: 10,
-              right: 10,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 300),
-                opacity: _isHovered ? 1.0 : 0.0,
+            // होव्हर केल्यावर दिसणारे शीर्षक
+            if (_isHovered)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                color: deepMatteBlack.withOpacity(0.7),
                 child: Text(
-                  widget.artwork.title,
-                  style: GoogleFonts.lora(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                  widget.title,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: offWhite,
+                      ),
                 ),
               ),
-            ),
           ],
         ),
       ),
